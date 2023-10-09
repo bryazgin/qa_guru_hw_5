@@ -1,4 +1,4 @@
-from selene import browser, be, have, by
+from selene import browser, be, have, by, command
 import os.path
 
 
@@ -14,13 +14,14 @@ def test_complete_form():
     browser.element('.react-datepicker__month-select').click().element(by.text('July')).click()
     browser.element('.react-datepicker__year-select').click().element(by.text('1995')).click()
     browser.element('.react-datepicker__day--010').click()
+    browser.element('#submit').perform(command.js.scroll_into_view)
     browser.element('#subjectsInput').type('Computer Science').press_enter()
     browser.all('.custom-control-label').element_by(have.exact_text('Sports')).click()
     browser.element('#uploadPicture').send_keys(os.path.abspath('image/image.jpg'))
     browser.element('#currentAddress').should(be.blank).type('pr. Lenina, dom 28, kv. 128')
     browser.element('#state').click().element(by.text('Haryana')).click()
     browser.element('#city').click().element(by.text('Karnal')).click()
-    browser.element('#submit').click()
+    browser.element('#submit').press_enter()
 
     browser.element('.modal-header').should(have.exact_text('Thanks for submitting the form'))
     browser.element('.table-responsive').all('td:nth-of-type(2)').should(have.texts(
